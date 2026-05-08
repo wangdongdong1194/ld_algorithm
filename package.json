@@ -1,0 +1,25 @@
+{
+  "name": "ld_algorithm",
+  "version": "1.0.6",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "start": "tsx src/test.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "wangdongdong1194",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^6.0.2"
+  }
+}
