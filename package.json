@@ -1,6 +1,6 @@
 {
   "name": "ld_algorithm",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,12 +11,16 @@
     }
   },
   "scripts": {
-    "start": "tsx src/test.ts",
     "build": "tsc"
   },
   "keywords": [],
   "author": "wangdongdong1194",
   "license": "ISC",
+  "repository": "github:wangdongdong1194/ld_algorithm", 
+  "homepage": "https://github.com/wangdongdong1194/ld_algorithm#readme", 
+  "bugs": {
+    "url": "https://github.com/wangdongdong1194/ld_algorithm/issues" 
+  },
   "devDependencies": {
     "@types/node": "^25.6.2",
     "tsx": "^4.20.6",
