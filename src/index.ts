@@ -1,4 +1,4 @@
-import { BaseData, type INodeData } from "./BaseData";
+import { BaseData } from "./BaseData";
 
 export { BaseData };
-export type { INodeData };
+export type { INodeData, AlignType, AttachDirection, PartialBaseData, IBaseData } from "./BaseData";
