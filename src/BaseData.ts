@@ -91,14 +91,19 @@ export abstract class BaseData {
   }
   private calNodePosY(currentY: number) {
     this.calNodeSh(this._rootId); // 先计算每个节点的sh值
-    this.calNodeY(this._rootId, currentY); // 然后计算每个节点的y坐标，根节点y固定
+    const rootNode = this._data[this._rootId];
+    const startY =
+      this.VERTICAL_ALIGN === "center" && rootNode
+        ? currentY - (rootNode.sh - rootNode.h) / 2
+        : currentY;
+    this.calNodeY(this._rootId, startY); // 然后计算每个节点的y坐标，根节点y固定
   }
   private calNodeY(nodeId: string, currentY: number) {
     if (!this._data[nodeId]) {
       return;
     }
     const node = this._data[nodeId];
-    // 根节点 y 固定不参与居中计算；子节点在 center 模式下居中于所分配的 sh 空间内
+    // center 模式下节点在分配的 sh 空间内居中；top 模式下贴顶对齐
     if (this.VERTICAL_ALIGN === "center") {
       node.y = currentY + (node.sh - node.h) / 2;
     } else {
