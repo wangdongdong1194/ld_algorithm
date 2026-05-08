@@ -176,9 +176,9 @@ export abstract class BaseData {
    * @param id 要删除的节点 id
    * @param delChildren 为 true 时递归删除所有子节点；为 false（默认）时子节点上移到被删节点的父节点下
    */
-  del(id: string, delChildren: boolean = false) {
+  del(id: string, delChildren: boolean = false) : boolean{
     if (!this._data[id]) {
-      return;
+      return false;
     }
     const parentId = this._data[id].parentId;
     if (parentId && this._data[parentId]) {
@@ -209,6 +209,7 @@ export abstract class BaseData {
       }
     }
     delete this._data[id];
+    return true;
   }
   /**
    * 在指定节点的某个方向插入新节点。
@@ -226,13 +227,13 @@ export abstract class BaseData {
     node: PartialBaseData,
     attachId: string,
     direction: AttachDirection = "right",
-  ) {
+  ): boolean {
     if (this._data[node.id]) {
-      return;
+      return false;
     }
     const attachNode = this._data[attachId];
     if (!attachNode) {
-      return;
+      return false;
     }
     const newNode: IBaseData = {
       ...node,
@@ -255,7 +256,7 @@ export abstract class BaseData {
     } else if (direction === "left") {
       // 不能向根节点的左侧添加节点，因为根节点没有父节点
       if (!attachNode.parentId) {
-        return;
+        return false;
       }
       // 新节点
       newNode.parentId = attachNode.parentId;
@@ -273,11 +274,11 @@ export abstract class BaseData {
       // up/down：作为 attachNode 的兄弟节点插入（前/后）
       // 根节点没有父节点，无法插入兄弟
       if (!attachNode.parentId) {
-        return;
+        return false;
       }
       const parentNode = this._data[attachNode.parentId];
       if (!parentNode) {
-        return;
+        return false;
       }
       // 新节点的父节点与 attachNode 相同
       newNode.parentId = attachNode.parentId;
@@ -294,6 +295,7 @@ export abstract class BaseData {
     }
 
     this._data[node.id] = newNode;
+    return true;
   }
   /**
    * 设置指定节点的宽度。
