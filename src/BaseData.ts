@@ -223,7 +223,7 @@ export abstract class BaseData<T extends IBaseData> {
    * @param direction 插入方向，默认为 `"right"`
    */
   addRight(
-    node: T,
+    node: Partial<T> & { id: string; w: number; h: number },
     attachId: string,
     direction: AttachDirection = "right",
   ): boolean {
@@ -234,7 +234,13 @@ export abstract class BaseData<T extends IBaseData> {
     if (!attachNode) {
       return false;
     }
-    const newNode = Object.assign(node, { x: 0, y: 0, children: [] as string[], parentId: '', sh: 0 });
+    const newNode = Object.assign(node, { 
+      x: 0,
+      y: 0,
+      children: [] as string[],
+      parentId: "",
+      sh: 0,
+    }) as T;
     // 处理连接关系，包括原父子节点和新节点
     if (direction === "right") {
       // 新节点
