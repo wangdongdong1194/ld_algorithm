@@ -17,15 +17,14 @@ export interface IBaseData {
   sh: number;
   y: number;
 }
-export type PartialBaseData = Omit<IBaseData, "children" | "parentId" | "sh">;
 export type AttachDirection = "left" | "right" | "top" | "bottom";
 export type AlignType = "top" | "center";
-export interface INodeData {
-  [id: string]: IBaseData;
+export interface INodeData<T extends IBaseData> {
+  [id: string]: T;
 }
 
-export abstract class BaseData {
-  private _data: INodeData = {};
+export abstract class BaseData<T extends IBaseData> {
+  private _data: INodeData<T> = {};
   private _rootId: string;
   private VERTICAL_SPACING: number = 50; // 垂直间距
   private HORIZONTAL_SPACING: number = 50; // 水平间距
@@ -44,12 +43,12 @@ export abstract class BaseData {
       id: this._rootId,
       w: 100,
       h: 50,
-      children: [],
+      children: [] as string[],
       parentId: null,
       sh: 0,
       x: 0,
       y: 0,
-    };
+    } as T;
   }
   // 层级
   private calLevel(
@@ -176,7 +175,7 @@ export abstract class BaseData {
    * @param id 要删除的节点 id
    * @param delChildren 为 true 时递归删除所有子节点；为 false（默认）时子节点上移到被删节点的父节点下
    */
-  del(id: string, delChildren: boolean = false) : boolean{
+  del(id: string, delChildren: boolean = false): boolean {
     if (!this._data[id]) {
       return false;
     }
@@ -224,7 +223,7 @@ export abstract class BaseData {
    * @param direction 插入方向，默认为 `"right"`
    */
   addRight(
-    node: PartialBaseData,
+    node: T,
     attachId: string,
     direction: AttachDirection = "right",
   ): boolean {
@@ -235,12 +234,7 @@ export abstract class BaseData {
     if (!attachNode) {
       return false;
     }
-    const newNode: IBaseData = {
-      ...node,
-      children: [],
-      parentId: "",
-      sh: 0,
-    };
+    const newNode = Object.assign(node, { x: 0, y: 0, children: [] as string[], parentId: '', sh: 0 });
     // 处理连接关系，包括原父子节点和新节点
     if (direction === "right") {
       // 新节点
