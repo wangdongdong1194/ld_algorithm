@@ -298,26 +298,6 @@ export abstract class BaseData<T extends IBaseData> {
     return true;
   }
   /**
-   * 设置指定节点的宽度。
-   * @param id 节点 id
-   * @param w 新的宽度值
-   */
-  setDataWidth(id: string, w: number) {
-    if (this._data[id]) {
-      this._data[id].w = w;
-    }
-  }
-  /**
-   * 设置指定节点的高度。
-   * @param id 节点 id
-   * @param h 新的高度值
-   */
-  setDataHeight(id: string, h: number) {
-    if (this._data[id]) {
-      this._data[id].h = h;
-    }
-  }
-  /**
    * 设置兄弟节点之间的垂直间距，默认 50。
    * @param spacing 垂直间距值（px）
    */
