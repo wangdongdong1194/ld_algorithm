@@ -28,8 +28,10 @@ export abstract class BaseData<T extends IBaseData> {
   private _rootId: string;
   private VERTICAL_SPACING: number = 50; // 垂直间距
   private HORIZONTAL_SPACING: number = 50; // 水平间距
-  private VERTICAL_ALIGN: AlignType = "top"; // 垂直对齐方式å
-
+  private VERTICAL_ALIGN: AlignType = "top"; // 垂直对齐方式
+  // 空间索引相关属性
+  protected spatialIndex = new Map<string, Set<string>>(); // 空间索引，key为坐标字符串"x,y"，value为节点id集合
+  protected spatialCellSize = 320;
   /**
    * 创建布局实例，并初始化根节点（w=100, h=50, x=0, y=0）。
    * @param rootId 根节点的唯一标识
@@ -148,7 +150,31 @@ export abstract class BaseData<T extends IBaseData> {
       }
     }
   }
-
+  private rebuildSpatialIndex(cellSize: number = 320) {
+    this.spatialCellSize = Math.max(1, Math.floor(cellSize));
+    this.spatialIndex.clear();
+    for (const nodeId in this._data) {
+      const node = this._data[nodeId];
+      if (!node) {
+        continue;
+      }
+      const minCellX = Math.floor(node.x / this.spatialCellSize);
+      const maxCellX = Math.floor((node.x + node.w) / this.spatialCellSize);
+      const minCellY = Math.floor(node.y / this.spatialCellSize);
+      const maxCellY = Math.floor((node.y + node.h) / this.spatialCellSize);
+      for (let cx = minCellX; cx <= maxCellX; cx++) {
+        for (let cy = minCellY; cy <= maxCellY; cy++) {
+          const key = `${cx},${cy}`;
+          let bucket = this.spatialIndex.get(key);
+          if (!bucket) {
+            bucket = new Set<string>();
+            this.spatialIndex.set(key, bucket);
+          }
+          bucket.add(nodeId);
+        }
+      }
+    }
+  }
   /**
    * 计算所有节点的 x/y 坐标。
    * 先重置 sh，再按层级计算 x，最后递归计算 y。
@@ -162,6 +188,9 @@ export abstract class BaseData<T extends IBaseData> {
 
     this.calNodePosX(currentX);
     this.calNodePosY(currentY);
+
+    // 更新空间索引
+    this.rebuildSpatialIndex();
   }
   /**
    * 获取所有节点数据。
@@ -234,7 +263,7 @@ export abstract class BaseData<T extends IBaseData> {
     if (!attachNode) {
       return false;
     }
-    const newNode = Object.assign(node, { 
+    const newNode = Object.assign(node, {
       x: 0,
       y: 0,
       children: [] as string[],
