@@ -208,6 +208,9 @@ export abstract class BaseData<T extends IBaseData> {
     if (!this._data[id]) {
       return false;
     }
+    if (id === this._rootId) {
+      return false; // 不允许删除根节点
+    }
     const parentId = this._data[id].parentId;
     if (parentId && this._data[parentId]) {
       this._data[parentId].children = this._data[parentId].children.filter(
