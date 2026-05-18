@@ -17,9 +17,9 @@
   "author": "wangdongdong1194",
   "license": "ISC",
   "repository": "github:wangdongdong1194/ld_algorithm", 
-  "homepage": "https://github.com/wangdongdong1194/ld_algorithm#readme", 
+  "homepage": "https://github.com/wangdongdong1194/tree_algorithm#readme", 
   "bugs": {
-    "url": "https://github.com/wangdongdong1194/ld_algorithm/issues" 
+    "url": "https://github.com/wangdongdong1194/tree_algorithm/issues" 
   },
   "devDependencies": {
     "@types/node": "^25.6.2",
